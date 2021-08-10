@@ -1,19 +1,30 @@
 ## Imports
 
-import matplotlib.pyploy as plt
-import matplotlib.image as mpimg
-import numpy as np
+import piv.interface as interface
+import utils.images as images
+
+from datetime import datetime
+from piv.interface import InputPIV, Marker
 
 
-## Setting parameters
+## Mocking inputs
 
-IMAGE_1 = './images/Image 1a.png'
-IMAGE_2 = './images/Image 1b.png'
-INTERROGATION_WINDOW = '32x32'
-FRAMES_PER_IMAGE = 1
+SCALE = 1
+ROI_SIZE = 300
+ROI_SIZE = None
+TIME_DELTA = 1
+INTERROGATION_WINDOW = 32
+
+input_images = images.load_images()
+images = { 1: input_images, 2: input_images }
+markers = { 1: Marker(100, 200), 2: Marker(780, 560) }
 
 
-## Main body
+## Running PIV
 
-img1 = mpimg.imread(IMAGE_1)
-img2 = mpimg.imread(IMAGE_2)
+start = datetime.now()
+frontend_input = InputPIV(images, TIME_DELTA, SCALE, INTERROGATION_WINDOW, ROI_SIZE, markers)
+output_data = interface.calculate_piv(frontend_input)
+end = datetime.now()
+
+print(f'Computation time: {str(end - start)}')

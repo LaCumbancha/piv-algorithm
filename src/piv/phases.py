@@ -1,3 +1,8 @@
+## Imports
+
+import numpy as np
+
+
 ## Calculate phases
 # Number of phases to reconstruct. If set to 1, no phase reconstruction is achieved.
 #
@@ -5,8 +10,6 @@
 #
 # Output:
 # A plain number representing the different phases and and a vector of phases.
-
-import numpy as np
 
 def calculate_phases(images, cumulcross=True, acquisition_freq=1, actuation_freq=1, default_phases=1):
     if cumulcross:

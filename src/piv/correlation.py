@@ -1,3 +1,8 @@
+# Imports
+
+import numpy as np
+
+
 ## Cumulative cross correlation
 # Averages correlation maps from an image stack.
 #
@@ -6,10 +11,8 @@
 #
 # Output: A correlation matrix with the same size as the images input.
 
-import numpy as np
-
 NORMALIZED_CORRELATION_RESOLUTION = 2**8
-def cumulative_cross_correlation(images, indexes, int_window):
+def cumulative_cross_correlation(images, indexes, window_size):
     
     total_correlation = 0
     for idx, image in enumerate(images):
@@ -20,7 +23,7 @@ def cumulative_cross_correlation(images, indexes, int_window):
         fft_a = np.fft.fft2(frame_a)
         fft_b = np.fft.fft2(frame_b)
 
-        fft_shifting = np.real(np.fft.ifft(np.fft.ifft(np.conj(fft_a) * fft_b, window_size, 2), window_size, 1))
+        fft_shifting = np.real(np.fft.ifft(np.fft.ifft(np.conj(fft_a) * fft_b, window_size, 1), window_size, 0))
         correlation = np.fft.fftshift(np.fft.fftshift(fft_shifting, 2), 1)
         correlation[correlation < 0] = 0
         

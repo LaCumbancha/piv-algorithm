@@ -1,11 +1,14 @@
+## Imports
+
+import numpy as np
+
+
 ## Filter fields
 # Applies different filters on the vector fields.
 #
 # WIP!
 #
 # Output: OutputPIV object, with filtered data
-
-import numpy as np
 
 DEFAULT_B = 1
 DEFAULT_THRESH = 1.5

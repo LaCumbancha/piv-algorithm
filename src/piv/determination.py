@@ -1,10 +1,13 @@
+# Imports
+
+import numpy as np
+import scipy.ndimage
+
+
 ## Vector field determination
 # Here it's where magic happens, calculating peaks and doing science stuff to get the proper PIV data.
 #
 # Output: OutputPIV object
-
-import scipy.ndimage
-import numpy as np
 
 S2N_FILTER = False
 DEFAULT_S2N_THRESHOLD = 1
@@ -26,12 +29,10 @@ def vector_field_determination(correlation, int_window, step, min_x, max_x, min_
     vector = sub_pixel_gaussian(corr, int_window, x1, y1, indexes1, pixel_offset)
     
     # Create data
-    x_range = np.arange(min_x, max_x, step)
-    y_range = np.arange(min_y, max_y, step)
+    x_range = np.arange(min_x, max_x + 1, step)
+    y_range = np.arange(min_y, max_y + 1, step)
     output_x = np.tile(x_range + int_window / 2, [len(y_range), 1])
     output_y = np.tile(y_range[:, None] + int_window / 2, [1, len(x_range)])
-
-    # TODO: Check flow, while testing vector had not enough elements to reshape.
     vector = np.reshape(vector, np.append(np.array(output_x.transpose().shape), 2), order='F').transpose([1, 0, 2])
 
     # Signal to noise filter

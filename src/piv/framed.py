@@ -1,3 +1,9 @@
+# Imports
+
+import utils.list
+import numpy as np
+
+
 ## Single to double frame
 # Combines images by 2, returning an array with two frames (one for each image). 
 #
@@ -17,15 +23,13 @@
 # Output:
 # Array with the following dimensions: 0 - Image; 1 - Frame; 2 - Height (Y); 3 - Width (X).
 
-import numpy as np
-
 def single_to_double_frame(images, step=1, roi=None):
-    total_images = len(images)
+    total_images = images.shape[0]
 
     frameA_idx = list(range(0,total_images-step))
     frameB_idx = [idx+1 for idx in frameA_idx]
 
-    height, width = first(images).shape
+    height, width = utils.list.first(images).shape
     mask = np.ones([height, width], np.uint8)
 
     images_double_framed = []
