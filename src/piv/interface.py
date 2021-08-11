@@ -4,102 +4,65 @@ import numpy as np
 import piv.core as core
 import piv.framed as framed
 
-
-## Communication Input data model
-# An ad-hoc object with the images to analyze and the algorithm settings. 
-# Points: Dictionary with the Point ID as key and a ad-hoc object with PositionX, PositionY and a list of the two images (as PIL.Image.Image) as value.
-# Settings.TimeDelta: Time between two images, iin miliseconds.
-# Settings.Scale: Image scaling, in pixels per milimeters.
-# Settings.WindowSize: Interrogation window size, default is 32.
-
-class InputPIV:
-    def __init__(self, points, time_delta, scale, window_size):
-        self.points = points
-        self.settings = Settings(time_delta, scale, window_size)
-        
-
-class Settings:
-    def __init__(self, time_delta, scale, window_size):
-        self.time_delta = time_delta
-        self.scale = scale
-        self.window_size = window_size
-        
-
-class Point:
-    def __init__(self, pos_x, pos_y, images):
-        self.pos_x = pos_x
-        self.pos_y = pos_y
-        self.images = images
-        
-        
+from piv.model import OutputPIV
+		
+		
 ## Communication Exceptions
 # Exception thrown when some parameters weren't passed as expected.
-        
+		
 class InvalidParametersError(Exception):
-    pass
+	pass
 
 
-## Retrieve point
-# Get the point positions in the desired format.
+## Prepare output
+# Get the velocity for the desired point. If it is not possible, it will get it for the closest point.
 #
-# Output: the point as (Y-Position, X-Position).
+# Output: OutputPIV object
 
-def retrieve_point_position(point_id, markers):
-    if point_id not in markers:
-        raise InvalidParametersError(f'Markers for point {point_id} missing.')
-        
-    point = markers[point_id]
-    return (point.pos_y, point.pos_x)
+def prepare_output(center_x, center_y, piv_data):
+	idx_x = (np.abs(piv_data.x[:,1] - center_x)).argmin()
+	idx_y = (np.abs(piv_data.y[1,:] - center_y)).argmin()
 
-
-## ROI indexes
-# Calculate the ROI indexes with the ROI size, the image size and the defined point
-#
-# Output: the ROI as an array, with format [X-start X-end Y-start Y-end], for example: [1 100 1 50].
-
-def roi_indexes(point, image_shape, roi_size=None):
-    if not roi_size:
-        return []
-    
-    max_y, max_x = image_shape
-    point_y, point_x = point
-    middle_roi = int(roi_size / 2)
-    
-    start_x = max(0, point_x - middle_roi)
-    start_y = max(0, point_y - middle_roi)
-    end_x = min(max_x - 1, point_x + middle_roi)
-    end_y = min(max_y - 1, point_y + middle_roi)
-    
-    return [start_x, end_x, start_y, end_y]
+	position_x = int(piv_data.x[idx_x,1]) + 1
+	position_y = int(piv_data.y[1,idx_y]) + 1
+	velocity_x = piv_data.u[idx_x,idx_y]
+	velocity_y = piv_data.v[idx_x,idx_y]
+	signal_to_noise = piv_data.s2n[idx_x,idx_y]
+	
+	return OutputPIV(position_x, position_y, velocity_x, velocity_y, signal_to_noise)
 
 
-## Entrypoint (WIP)
+## Entrypoint
 # Retrieve the images, prepare them and calculate the PIV computation.
 #
 # Output: OutputPIV object
 
 DEFAULT_INTERROGATION_WINDOW = 32
 def calculate_piv(frontend_data):
-    results = {}
-    settings = frontend_data.settings
-    
-    # TODO: Check if this could be parallelized to increase performance.
-    for point_id, input_images in frontend_data.images.items():
-        
-        # TODO: Check if the images should be transformed first (like, to a grey scale).
-        point_position = retrieve_point_position(point_id, settings.markers)
-        roi = roi_indexes(point_position, input_images[0].shape, settings.roi_size)
+	results = {}
+	settings = frontend_data.settings
+	
+	# TODO: Check if this could be parallelized to increase performance.
+	for point_id, point_data in frontend_data.points.items():
 
-        double_framed_images = framed.single_to_double_frame(input_images, roi=roi)
-        if double_framed_images.size <= 2:
-            raise InvalidParametersError(f'Not enough images passed for point {point_id}')
-        
-        piv_data = core.PIV(double_framed_images, settings.int_window)
-        piv_data.x = piv_data.x * settings.scale
-        piv_data.y = piv_data.y * settings.scale
-        piv_data.u = piv_data.u * settings.scale / settings.time_delta
-        piv_data.v = piv_data.v * settings.scale / settings.time_delta
-        
-        results[point_id] = piv_data
-    
-    return results
+		double_framed_images = framed.single_to_double_frame(point_data.images)
+		if double_framed_images.size <= 2:
+			raise InvalidParametersError(f'Not enough images passed for point {point_id}')
+			
+		shift_x = 0
+		shift_y = 0
+		if settings.roi_size is not None:
+			roi_shift = int(settings.roi_size / 2)
+			shift_x = point_data.pos_x - roi_shift
+			shift_y = point_data.pos_y - roi_shift
+		
+		piv_data = core.PIV(double_framed_images, settings.window_size)
+		piv_data.x = piv_data.x * settings.scale + shift_x
+		piv_data.y = piv_data.y * settings.scale + shift_y
+		piv_data.u = piv_data.u * settings.scale / settings.time_delta
+		piv_data.v = piv_data.v * settings.scale / settings.time_delta
+		
+		point_results = prepare_output(point_data.pos_x - 1, point_data.pos_y - 1, piv_data)
+		results[point_id] = point_results
+	
+	return results
