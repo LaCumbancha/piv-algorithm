@@ -1,5 +1,8 @@
+# Python
+__pycache__/
+
 # Notebooks
-**/.ipynb_checkpoint/
+.ipynb_checkpoint/
 
 # Mac
 **.DS_Store
