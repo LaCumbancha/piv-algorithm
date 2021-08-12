@@ -34,7 +34,7 @@ def filter_fields(data, std_threashold=DEFAULT_STD_THRESHOLD):
     data.v[data.v > max_v] = np.nan
     
     # Filter 3:
-    # TODO.
+    # TODO: Must be migrated from Matlab to Numpy.
     
     # Inpaint NANs
     data.u = inpaint_nans(data.u)
