@@ -1,6 +1,5 @@
 # Imports
 
-import utils.list
 import numpy as np
 
 
@@ -26,11 +25,8 @@ import numpy as np
 def single_to_double_frame(images, step=1, roi=None):
     total_images = images.shape[0]
 
-    frameA_idx = list(range(0,total_images-step))
+    frameA_idx = list(range(0, total_images-step))
     frameB_idx = [idx+1 for idx in frameA_idx]
-
-    height, width = utils.list.first(images).shape
-    mask = np.ones([height, width], np.uint8)
 
     images_double_framed = []
     for idx in frameA_idx:

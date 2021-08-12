@@ -56,7 +56,7 @@ def calculate_piv(frontend_data):
             shift_x = point_data.pos_x - roi_shift
             shift_y = point_data.pos_y - roi_shift
         
-        piv_data = core.PIV(double_framed_images, settings.window_size)
+        piv_data = core.piv(double_framed_images, settings.window_size)
         piv_data.x = piv_data.x * settings.scale + shift_x
         piv_data.y = piv_data.y * settings.scale + shift_y
         piv_data.u = piv_data.u * settings.scale / settings.time_delta

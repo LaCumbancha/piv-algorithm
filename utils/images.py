@@ -10,14 +10,8 @@ from PIL import Image
 # Output: 
 # Array with the following dimensions: 0 - Image; 1 - Height (Y); 2 - Width (X).
 
-IMAGE_1 = './images/Image 1a.png'
-IMAGE_2 = './images/Image 1b.png'
-
 
 def load_images(images_paths=None):
-    if images_paths is None:
-        images_paths = [IMAGE_1, IMAGE_2]
-
     images = []
     for image in images_paths:
         img = Image.open(image)

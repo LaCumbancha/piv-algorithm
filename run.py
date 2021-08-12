@@ -1,8 +1,8 @@
 # Imports
 
+import piv
 import numpy as np
 import utils.images as utils
-import piv.interface as interface
 
 from datetime import datetime
 from piv.model import InputPIV, Point
@@ -27,17 +27,21 @@ def crop_images(images, center=None, size=None):
 
 # Mocking inputs
 
+IMAGE_1 = './extras/images/Image 1a.png'
+IMAGE_2 = './extras/images/Image 1b.png'
+images_paths = [IMAGE_1, IMAGE_2]
+
 scale = 1
 time_delta = 1
 window_size = 32
-input_images = utils.load_images()
+input_images = utils.load_images(images_paths)
 points = {1: Point(400, 800, input_images)}
 
 # Running PIV
 
 start = datetime.now()
 frontend_input = InputPIV(points, time_delta, scale, window_size)
-output_data = interface.calculate_piv(frontend_input)
+output_data = piv.calculate_piv(frontend_input)
 end = datetime.now()
 
 # Results

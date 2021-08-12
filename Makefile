@@ -1,7 +1,7 @@
 SHELL := /bin/bash
 PWD := $(shell pwd)
-PYTHON = /usr/local/bin/python3 -W ignore
+PYTHON := /usr/local/bin/python3 -W ignore
 
 system-up:
-    @$(PYTHON) ./src/main.py
+	@$(PYTHON) ./run.py
 .PHONY: system-up

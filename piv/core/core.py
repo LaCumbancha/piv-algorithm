@@ -4,7 +4,7 @@ import piv.filters as filters
 import piv.correlation as correlation
 import piv.preparation as preparation
 import piv.determination as determination
-    
+
 
 # Calculate PIV
 # Generate the PIV data from the images loaded with the input parameters.

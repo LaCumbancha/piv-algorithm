@@ -7,7 +7,7 @@ import numpy as np
 import numpy.matlib as npmb
 
 
-## Prepare images for PIV
+# Prepare images for PIV
 # Determine which indices must be used to create the interrogation windows. 
 # It also add a padding dark color to the images.
 #
