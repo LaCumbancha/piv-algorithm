@@ -26,11 +26,3 @@ pip install numpy
 pip install scipy
 ```
 
-* FFTW
-
-```bash
-brew install fftw
-export DYLD_LIBRARY_PATH=/usr/local/lib export LDFLAGS="-L/usr/local/lib"
-export CFLAGS="-I/usr/local/include"
-pip install pyfftw
-```
