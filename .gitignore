@@ -1,8 +1,11 @@
+# Pycharm
+.idea/
+
 # Python
 __pycache__/
 
 # Notebooks
-.ipynb_checkpoint/
+.ipynb_checkpoints/
 
 # Mac
 **.DS_Store

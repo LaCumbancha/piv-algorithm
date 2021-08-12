@@ -1,7 +1,8 @@
 # Utils
 
-def first(aList):
-	return aList[0]
+def first(a_list):
+    return a_list[0]
 
-def last(aList):
-	return aList[-1]
+
+def last(a_list):
+    return a_list[-1]
