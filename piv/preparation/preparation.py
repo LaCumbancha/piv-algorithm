@@ -4,7 +4,6 @@ import math
 import utils.list
 
 import numpy as np
-import numpy.matlib as npmb
 
 
 # Prepare images for PIV
@@ -46,12 +45,12 @@ def prepare_piv_images(images, window_size, step):
     
     # Interrogation window indexes for first frame.
     padded_size_y, padded_size_x = utils.list.first(padded_images)[0].shape
-    min_s0 = npmb.repmat(np.array(np.arange(min_y, max_y + 1, step) - 1)[:, None], 1, vectors_u)
-    max_s0 = npmb.repmat(np.array(np.arange(min_x, max_x + 1, step) - 1) * padded_size_y, vectors_v, 1)
+    min_s0 = np.tile(np.arange(min_y, max_y + 1, step)[:, None] - 1, [1, vectors_u])
+    max_s0 = np.tile(np.arange(min_x - 1, max_x, step) * padded_size_y, [vectors_v, 1])
     s0 = np.asarray(min_s0 + max_s0).flatten()[..., np.newaxis, np.newaxis].transpose([1, 2, 0])
 
-    min_s1 = npmb.repmat(np.array(np.arange(1, window_size + 1))[:, None], 1, window_size)
-    max_s1 = npmb.repmat(np.array(np.arange(1, window_size + 1) - 1) * padded_size_y, window_size, 1)
+    min_s1 = np.tile(np.arange(1, window_size + 1)[:, None], [1, window_size])
+    max_s1 = np.tile(np.arange(0, window_size) * padded_size_y, [window_size, 1])
     s1 = min_s1 + max_s1
 
     indexes = np.tile(np.asarray(s1)[..., np.newaxis], [1, 1, s0.shape[2]]) + np.tile(s0, [window_size, window_size, 1]) - 1

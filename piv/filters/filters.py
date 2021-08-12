@@ -2,6 +2,7 @@
 
 import numpy as np
 import scipy.sparse
+import scipy.ndimage
 import scipy.sparse.linalg
 
 from oct2py import Oct2Py
