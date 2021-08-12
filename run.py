@@ -25,6 +25,14 @@ def crop_images(images, center=None, size=None):
     return np.asarray(cropped_images)
 
 
+def print_output(point_piv):
+    print(f'X: {point_piv.x}')
+    print(f'Y: {point_piv.y}')
+    print(f'U: {point_piv.u}')
+    print(f'V: {point_piv.v}')
+    print(f'S2N: {point_piv.s2n}')
+
+
 # Mocking inputs
 
 IMAGE_1 = './extras/images/Image 1a.png'
@@ -35,7 +43,10 @@ scale = 1
 time_delta = 1
 window_size = 32
 input_images = utils.load_images(images_paths)
-points = {1: Point(400, 800, input_images)}
+
+point_1 = Point(815, 548, input_images)
+point_2 = Point(692, 512, input_images)
+points = { 1: point_1, 2: point_2 }
 
 # Running PIV
 
@@ -46,9 +57,16 @@ end = datetime.now()
 
 # Results
 
-print(f'X: {output_data[1].x}')
-print(f'Y: {output_data[1].y}')
-print(f'U: {output_data[1].u}')
-print(f'V: {output_data[1].v}')
-print(f'S2N: {output_data[1].s2n}')
+output_point_1 = output_data[1]
+output_point_2 = output_data[2]
+
+
+print(f'POINT 1:')
+print(f'--------')
+print_output(output_point_1)
+
+print(f'POINT 2:')
+print(f'--------')
+print_output(output_point_2)
+
 print(f'Computation time: {str(end - start)}')
