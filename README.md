@@ -9,6 +9,7 @@ La medición de caudal en microfluídica es difícil debido a los muy bajos caud
 ## Requisitos
 
 * Python 3+
+* Octave
 
 ### Librerías
 
@@ -17,6 +18,7 @@ Aquí se listan las librerías necesarias para correr el proyecto, con los coman
 * MacOS
 
 ```bash
+brew install octave
 brew install pip              # Pip
 pip install numpy             # Numpy
 pip install scipy             # Scipy
@@ -26,6 +28,7 @@ pip install oct2py            # Oct2Py
 * Linux
 
 ```bash
+sudo snap install octave
 sudo apt-get install pip      # Pip
 pip install numpy             # Numpy
 pip install scipy             # Scipy
