@@ -76,11 +76,11 @@ function [z,s,exitflag] = smoothn(varargin)
 %   dimensions with missing values. Computational Statistics & Data
 %   Analysis, 2010;54:1167-1178. 
 %   <a
-%   href="matlab:web('http://www.biomecardio.com/publis/csda10.pdf')">download PDF</a>
+%   href="matlab-legacy:web('http://www.biomecardio.com/publis/csda10.pdf')">download PDF</a>
 %   2) Garcia D, A fast all-in-one method for automated post-processing of
 %   PIV data. Exp Fluids, 2011;50:1247-1259.
 %   <a
-%   href="matlab:web('http://www.biomecardio.com/publis/expfluids11.pdf')">download PDF</a>
+%   href="matlab-legacy:web('http://www.biomecardio.com/publis/expfluids11.pdf')">download PDF</a>
 %
 %
 %   EXAMPLES:
@@ -221,7 +221,7 @@ function [z,s,exitflag] = smoothn(varargin)
 %
 %   -- Damien Garcia -- 2009/03, last update 2020/06
 %   website: <a
-%   href="matlab:web('http://www.biomecardio.com/en')">www.BiomeCardio.com</a>
+%   href="matlab-legacy:web('http://www.biomecardio.com/en')">www.BiomeCardio.com</a>
 %% Check input arguments
 narginchk(1,5);
 OPTIONS = struct;

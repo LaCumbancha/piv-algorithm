@@ -3,11 +3,8 @@
 import numpy as np
 
 
-# Cumulative cross correlation
+# Cumulative cross correlation (WIP)
 # Averages correlation maps from an image stack.
-#
-# TODO: This function isn't working properly! Matlab FFT ≠ Numpy FFT.
-# Should fix the cross correlation calculation and also check the normalization (different shape expected).
 #
 # Output: A correlation matrix with the same size as the images input.
 
@@ -23,6 +20,7 @@ def cumulative_cross_correlation(images, indexes, window_size):
         fft_a = np.fft.fft2(frame_a)
         fft_b = np.fft.fft2(frame_b)
 
+        # TODO: Check results and compare with Matlab's, because the FFT may differ.
         fft_shifting = np.real(np.fft.ifft(np.fft.ifft(np.conj(fft_a) * fft_b, window_size, 1), window_size, 0))
         correlation = np.fft.fftshift(np.fft.fftshift(fft_shifting, 2), 1)
         correlation[correlation < 0] = 0
