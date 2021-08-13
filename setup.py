@@ -1,8 +1,8 @@
 from setuptools import setup
 
-# File created following instructions
-# 1. here: https://www.jetbrains.com/help/pycharm/creating-and-running-setup-py.html
-# 2. and here: https://packaging.python.org/guides/distributing-packages-using-setuptools/#setup-args
+# File created following instructions:
+# 1. JetBrains: https://www.jetbrains.com/help/pycharm/creating-and-running-setup-py.html
+# 2. Python: https://packaging.python.org/guides/distributing-packages-using-setuptools/#setup-args
 
 setup(
     name='piv-algorithm',
@@ -13,7 +13,7 @@ setup(
     license='License',
     author='Cristian Raña',
     author_email='cerana@fi.uba.ar',
-    description='Desc.: piv calculator',
+    description='PIV aglorithm',
     python_requires='>=3',
     install_requires=['numpy', 'scipy', 'oct2py']
 )

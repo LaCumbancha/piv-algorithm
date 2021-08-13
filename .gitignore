@@ -1,8 +1,9 @@
-# Pycharm
+# PyCharm
 .idea/
 
 # Python
 __pycache__/
+build/
 
 # Notebooks
 .ipynb_checkpoints/
@@ -10,5 +11,5 @@ __pycache__/
 # Mac
 **.DS_Store
 
-# virtual env
+# Virtual env
 venv/
