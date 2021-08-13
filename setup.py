@@ -6,7 +6,7 @@ from setuptools import setup
 
 setup(
     name='piv-algorithm',
-    version='0.1.0',
+    version='0.1.1',
     packages=['piv', 'piv.core', 'piv.model', 'piv.framed', 'piv.phases', 'piv.filters', 'piv.interface',
               'piv.correlation', 'piv.preparation', 'piv.determination', 'utils'],
     url='https://github.com/LaCumbancha/piv-algorithm',

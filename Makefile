@@ -7,6 +7,7 @@ system-up:
 .PHONY: system-up
 
 build:
+	@rm -rf build/
 	@$(PYTHON) -m pip install build
 	@$(PYTHON) -m build --wheel
 .PHONY: system-up
