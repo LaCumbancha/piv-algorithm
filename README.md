@@ -26,3 +26,5 @@ pip install numpy
 pip install scipy
 ```
 
+# Octave
+You should have Octave cli installed. You may install it by running: `sudo snap install octave`.
