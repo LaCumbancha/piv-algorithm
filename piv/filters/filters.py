@@ -34,7 +34,7 @@ def filter_fields(data, std_threashold=DEFAULT_STD_THRESHOLD):
     data.v[data.v > max_v] = np.nan
     
     # Filter 3:
-    # TODO.
+    # TODO: Must be migrated from Matlab to Numpy.
     
     # Inpaint NANs
     data.u = inpaint_nans(data.u)
@@ -143,7 +143,16 @@ def inpaint_nans(data, iterations=DEFAULT_SPRING_ITERATIONS):
     return np.reshape(output, (size_x, size_y)).transpose()
 
 
-# Smooth predictor (WIP)
+# Normal fluctuation
+# Custom Matlab filter that couldn't be translated to Python.
+#
+# Output: The same
+
+def normal_fluctuation(data):
+    return oc.smoothn(data)
+
+
+# Smooth predictor
 # Fast, automatized and robust discrete spline smoothing for data of arbitrary dimension.
 # Automatically smooths the uniformly-sampled input array. It can be any N-D noisy array (time series, images,
 # 3D data, ...). Non finite data (NaN or Inf) are treated as missing values.
@@ -151,6 +160,7 @@ def inpaint_nans(data, iterations=DEFAULT_SPRING_ITERATIONS):
 # Output: A matrix with the same dimensions ang items as the input, but with NANs replaced.
 
 oc = Oct2Py()
+oc.addpath('./matlab/')
 def smooth(data):
     return oc.smoothn(data)
 

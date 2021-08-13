@@ -40,11 +40,11 @@ def vector_field_determination(correlation, int_window, step, min_x, max_x, min_
     # Signal to noise filter
     s2n = s2n[np.reshape(np.array(range(output_x.size)), output_x.transpose().shape, order='F').transpose()]
     if S2N_FILTER:
-        vector[:,:,0] = vector[:,:,0] * (s2n > DEFAULT_S2N_THRESHOLD)
-        vector[:,:,1] = vector[:,:,1] * (s2n > DEFAULT_S2N_THRESHOLD)
+        vector[:, :, 0] = vector[:, :, 0] * (s2n > DEFAULT_S2N_THRESHOLD)
+        vector[:, :, 1] = vector[:, :, 1] * (s2n > DEFAULT_S2N_THRESHOLD)
     
-    output_u = vector[:,:,0]
-    output_v = vector[:,:,1]
+    output_u = vector[:, :, 0]
+    output_v = vector[:, :, 1]
 
     output_x -= int_window/2
     output_y -= int_window/2

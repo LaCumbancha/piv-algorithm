@@ -32,7 +32,7 @@ def prepare_output(center_x, center_y, piv_data):
     return OutputPIV(position_x, position_y, velocity_x, velocity_y, signal_to_noise)
 
 
-# Entrypoint
+# Entrypoint (WIP)
 # Retrieve the images, prepare them and calculate the PIV computation.
 #
 # Output: OutputPIV object
