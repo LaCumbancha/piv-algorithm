@@ -32,7 +32,7 @@ def prepare_output(center_x, center_y, piv_data):
     return OutputPIV(position_x, position_y, velocity_x, velocity_y, signal_to_noise)
 
 
-# Entrypoint (WIP)
+# Entrypoint
 # Retrieve the images, prepare them and calculate the PIV computation.
 #
 # Output: OutputPIV object
@@ -43,6 +43,7 @@ def calculate_piv(frontend_data):
     settings = frontend_data.settings
     
     # TODO: Check if this could be parallelized to increase performance.
+    #   Using multiprocessing increase the response time substantially.
     for point_id, point_data in frontend_data.points.items():
 
         double_framed_images = framed.single_to_double_frame(point_data.images)

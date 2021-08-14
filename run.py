@@ -33,40 +33,41 @@ def print_output(point_piv):
     print(f'S2N: {point_piv.s2n}')
 
 
-# Mocking inputs
+if __name__ == "__main__":
 
-IMAGE_1 = './extras/images/Image 1a.png'
-IMAGE_2 = './extras/images/Image 1b.png'
-images_paths = [IMAGE_1, IMAGE_2]
+    # Mocking inputs
 
-scale = 1
-time_delta = 1
-window_size = 32
-input_images = utils.load_images(images_paths)
+    IMAGE_1 = './extras/images/Image 1a.png'
+    IMAGE_2 = './extras/images/Image 1b.png'
+    images_paths = [IMAGE_1, IMAGE_2]
 
-point_1 = Point(815, 548, input_images)
-point_2 = Point(692, 512, input_images)
-points = { 1: point_1, 2: point_2 }
+    scale = 1
+    time_delta = 1
+    window_size = 32
+    input_images = utils.load_images(images_paths)
 
-# Running PIV
+    point_1 = Point(815, 548, input_images)
+    point_2 = Point(692, 512, input_images)
+    points = { 1: point_1, 2: point_2, 3: point_2, 4: point_2, 5: point_2, 6: point_2, 7: point_2, 8: point_2 }
 
-start = datetime.now()
-frontend_input = InputPIV(points, time_delta, scale, window_size)
-output_data = piv.calculate_piv(frontend_input)
-end = datetime.now()
+    # Running PIV
 
-# Results
+    start = datetime.now()
+    frontend_input = InputPIV(points, time_delta, scale, window_size)
+    output_data = piv.calculate_piv(frontend_input)
+    end = datetime.now()
 
-output_point_1 = output_data[1]
-output_point_2 = output_data[2]
+    # Results
 
+    output_point_1 = output_data[1]
+    output_point_2 = output_data[2]
 
-print(f'POINT 1:')
-print(f'--------')
-print_output(output_point_1)
+    print(f'POINT 1:')
+    print(f'--------')
+    print_output(output_point_1)
 
-print(f'POINT 2:')
-print(f'--------')
-print_output(output_point_2)
+    print(f'POINT 2:')
+    print(f'--------')
+    print_output(output_point_2)
 
-print(f'Computation time: {str(end - start)}')
+    print(f'Computation time: {str(end - start)}')
