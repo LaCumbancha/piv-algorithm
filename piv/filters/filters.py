@@ -13,6 +13,9 @@ from oct2py import Oct2Py
 #
 # Output: OutputPIV object, with filtered data.
 
+B = 1
+EPSILON = 0.02
+DEFAULT_THRESH = 1.5
 DEFAULT_STD_THRESHOLD = 4
 def filter_fields(data, std_threashold=DEFAULT_STD_THRESHOLD):
     # Filter 1: Threshold on signal to noise.  
@@ -34,7 +37,41 @@ def filter_fields(data, std_threashold=DEFAULT_STD_THRESHOLD):
     data.v[data.v > max_v] = np.nan
     
     # Filter 3:
-    # TODO: Must be migrated from Matlab to Numpy.
+    size_y, size_x = data.u.shape
+    normal_fluctuation = np.zeros(shape=(size_y, size_x, 2))
+
+    for it in range(2):
+        velocity_comparator = data.u if it == 0 else data.v
+        neighbors = np.empty(shape=(size_y - 2, size_x - 2, 2 * B + 1, 2 * B + 1))
+
+        for ii in range(-B, B + 1):
+            for jj in range(-B, B + 1):
+                ii_start = 1 + B - 1 + ii
+                ii_end = -B + ii if -B + ii < 0 else None
+                jj_start = 1 + B - 1 + jj
+                jj_end = -B + jj if -B + jj < 0 else None
+
+                ii_neighbors = ii + 2 * B - 1
+                jj_neighbors = jj + 2 * B - 1
+
+                neighbors[:, :, ii_neighbors, jj_neighbors] = velocity_comparator[ii_start:ii_end, jj_start:jj_end]
+
+        first_neighbors = np.arange((2 * B + 1) * B + B)
+        last_neighbors = np.arange((2 * B + 1) * B + B + 1, (2 * B + 1) ** 2)
+        neighbors_column = np.reshape(neighbors, [neighbors.shape[0], neighbors.shape[1], (2 * B + 1) ** 2], order='F')
+        neighbors_column2 = neighbors_column[:, :, np.append(first_neighbors, last_neighbors)].transpose([2, 0, 1])
+
+        median = np.median(neighbors_column2, axis=0).transpose()
+        velocity_comparator2 = velocity_comparator[B:-B, B:-B]
+        fluctuation = velocity_comparator2 - median.transpose()
+        result = neighbors_column2 - np.tile(median, [(2 * B + 1) ** 2 - 1, 1, 1]).transpose([0, 2, 1])
+
+        median_result = np.median(np.abs(result), axis=0)
+        normal_fluctuation[B:-B, B:-B, it] = np.abs(fluctuation / (median_result + EPSILON))
+
+    info = np.sqrt(normal_fluctuation[:, :, 0] ** 2 + normal_fluctuation[:, :, 1] ** 2) > DEFAULT_THRESH
+    data.u[info] = np.nan
+    data.v[info] = np.nan
     
     # Inpaint NANs
     data.u = inpaint_nans(data.u)
@@ -137,19 +174,10 @@ def inpaint_nans(data, iterations=DEFAULT_SPRING_ITERATIONS):
 
     # Solve problem
     output = flattened
-    solution, _, _, _, _, _, _, _, _ ,_ = scipy.sparse.linalg.lsqr(springs[:, nan_indexes], rhs) 
+    solution, _, _, _, _, _, _, _, _, _ = scipy.sparse.linalg.lsqr(springs[:, nan_indexes], rhs)
     output[nan_indexes] = solution
 
     return np.reshape(output, (size_x, size_y)).transpose()
-
-
-# Normal fluctuation
-# Custom Matlab filter that couldn't be translated to Python.
-#
-# Output: The same
-
-def normal_fluctuation(data):
-    return oc.smoothn(data)
 
 
 # Smooth predictor
@@ -171,10 +199,10 @@ def smooth(data):
 # Output: A matrix that works as a Gaussian filter.
 
 def gaussian_filter(size=3, sigma=0.5):
-    m,n = [(ss-1.)/2. for ss in (size, size)]
-    y,x = np.ogrid[-m:m+1,-n:n+1]
-    h = np.exp( -(x*x + y*y) / (2.*sigma*sigma) )
-    h[ h < np.finfo(h.dtype).eps*h.max() ] = 0
+    m, n = [(ss-1.)/2. for ss in (size, size)]
+    y, x = np.ogrid[-m:m+1, -n:n+1]
+    h = np.exp(-(x*x + y*y) / (2.*sigma*sigma))
+    h[h < np.finfo(h.dtype).eps * h.max()] = 0
     sumh = h.sum()
     if sumh != 0:
         h /= sumh
