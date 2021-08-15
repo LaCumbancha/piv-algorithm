@@ -11,6 +11,6 @@ build:
 	@$(PYTHON) -m build --wheel
 .PHONY: system-up
 
-run:
-	@$(PYTHON) ./run.py
+test:
+	@$(PYTHON) ./test.py
 .PHONY: system-up
