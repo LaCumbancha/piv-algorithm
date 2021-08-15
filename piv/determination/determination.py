@@ -3,6 +3,7 @@
 import numpy as np
 import scipy.ndimage
 
+from .fix import fix_filter
 from piv.model import OutputPIV
 
 
@@ -61,9 +62,8 @@ def sub_pixel_gaussian(correlation, int_window, x, y, indexes, pixel_offset):
     z = np.array(range(indexes.shape[0])).transpose()
     
     xi = np.nonzero(np.logical_not(np.logical_and(
-        # Adjusting -1 to -2 according to Matlab/Python mapping.
         np.logical_and(x <= correlation.shape[1] - 2, y <= correlation.shape[0] - 2),
-        np.logical_and(x >= 2, y >= 2)
+        np.logical_and(x >= 1, y >= 1)
     )))[0]
 
     x = np.delete(x, xi)
@@ -97,18 +97,20 @@ def sub_pixel_gaussian(correlation, int_window, x, y, indexes, pixel_offset):
 # Find all integer pixel displacement in a stack of correlation windows.
 #
 # Output: Horizontal and vertical indexes of the first and second maximum for each slice of correlation in the third
-# dimension (PeakX1, PeackY1, PeakX2, PeakY2), the absolute indexes of the correlation maximums (Idx1, Idx2) and the
-# ratio between the first and second peack (S2N) - 0 indicates non confiable results.
+# dimension (PeakX1, PeakY1, PeakX2, PeakY2), the absolute indexes of the correlation maximums (Idx1, Idx2) and the
+# ratio between the first and second peak (S2N) - 0 indicates non trusty results.
 
+SCIPY_FIX = True
 def find_all_displacements(correlation):
     corr_size = correlation.shape[0]
     
     # Finding first peak
     peak1_val, peak1_x, peak1_y, peak_indexes1, peak_positions1 = find_peaks(correlation)
 
-    # Finding second peak (1 extra point from Matlab size)
-    filter_size = 10 if corr_size >= 64 else 5 if corr_size >= 32 else 4
+    # Finding second peak
+    filter_size = 9 if corr_size >= 64 else 4 if corr_size >= 32 else 3
     filtered = scipy.ndimage.correlate(peak_positions1, np.ones([filter_size, filter_size, 1]), mode='constant')
+    filtered = fix_filter(filtered) if SCIPY_FIX else filtered
     correlation = (1 - filtered) * correlation
     peak2_val, peak2_x, peak2_y, peak_indexes2, _ = find_peaks(correlation)
 
@@ -126,7 +128,7 @@ def find_all_displacements(correlation):
     signal_to_noise[peak2_y == (corr_size - 1)] = 0
     signal_to_noise[peak2_x == (corr_size - 1)] = 0
     
-    return peak1_x, peak1_y, peak_indexes2, peak2_x, peak2_y, peak_indexes2, signal_to_noise
+    return peak1_x, peak1_y, peak_indexes1, peak2_x, peak2_y, peak_indexes2, signal_to_noise
     
     
 # Find peaks
