@@ -5,7 +5,7 @@ import scipy.sparse
 import scipy.ndimage
 import scipy.sparse.linalg
 
-from oct2py import Oct2Py
+from octave import octave_cli
 
 
 # Filter fields (WIP)
@@ -187,10 +187,8 @@ def inpaint_nans(data, iterations=DEFAULT_SPRING_ITERATIONS):
 #
 # Output: A matrix with the same dimensions ang items as the input, but with NANs replaced.
 
-oc = Oct2Py()
-oc.addpath('./matlab/')
 def smooth(data):
-    return oc.smoothn(data)
+    return octave_cli.smoothn(data)
 
     
 # Gaussian filter

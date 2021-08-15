@@ -43,7 +43,7 @@ def calculate_piv(frontend_data):
     settings = frontend_data.settings
     
     # TODO: Check if this could be parallelized to increase performance.
-    #   Using multiprocessing increase the response time substantially.
+    #   Using Python's multiprocessing increase the response time substantially.
     for point_id, point_data in frontend_data.points.items():
 
         double_framed_images = framed.single_to_double_frame(point_data.images)

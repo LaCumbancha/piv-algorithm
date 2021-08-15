@@ -2,6 +2,8 @@
 
 import numpy as np
 
+from octave import octave_cli
+
 
 # Cumulative cross correlation (WIP)
 # Averages correlation maps from an image stack.
@@ -12,18 +14,12 @@ NORMALIZED_CORRELATION_RESOLUTION = 2**8
 def cumulative_cross_correlation(images, indexes, window_size):
     
     total_correlation = 0
-    for idx, image in enumerate(images):
-        frame_a = image[0].take(indexes).astype(np.single)
-        frame_b = image[1].take(indexes).astype(np.single)
-        
-        # Calculating cross correlation
-        fft_a = np.fft.fft2(frame_a)
-        fft_b = np.fft.fft2(frame_b)
+    for idx, frames in enumerate(images):
+        frame_a = frames[0].flatten(order='F').take(indexes).astype(np.single)
+        frame_b = frames[1].flatten(order='F').take(indexes).astype(np.single)
 
-        # TODO: Check results and compare with Matlab's, because the FFT may differ.
-        fft_shifting = np.real(np.fft.ifft(np.fft.ifft(np.conj(fft_a) * fft_b, window_size, 1), window_size, 0))
-        correlation = np.fft.fftshift(np.fft.fftshift(fft_shifting, 2), 1)
-        correlation[correlation < 0] = 0
+        # Calculating cross correlation
+        correlation = octave_cli.correlate(frame_a, frame_b, window_size)
         
         # Normalizing correlation
         min_corr = np.tile(correlation.min(0).min(0), [correlation.shape[0], correlation.shape[1], 1])

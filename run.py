@@ -48,7 +48,7 @@ if __name__ == "__main__":
 
     point_1 = Point(815, 548, input_images)
     point_2 = Point(692, 512, input_images)
-    points = { 1: point_1, 2: point_2, 3: point_2, 4: point_2, 5: point_2, 6: point_2, 7: point_2, 8: point_2 }
+    points = {1: point_1, 2: point_2}
 
     # Running PIV
 
