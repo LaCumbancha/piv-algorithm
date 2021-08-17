@@ -3,7 +3,6 @@
 
 # Python
 __pycache__/
-build/
 
 # Notebooks
 .ipynb_checkpoints/
