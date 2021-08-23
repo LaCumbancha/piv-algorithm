@@ -8,6 +8,7 @@ piv/correlation/__init__.py
 piv/correlation/correlation.py
 piv/determination/__init__.py
 piv/determination/determination.py
+piv/determination/fix.py
 piv/filters/__init__.py
 piv/filters/filters.py
 piv/framed/__init__.py

@@ -75,17 +75,17 @@ def sub_pixel_gaussian(correlation, int_window, x, y, indexes, pixel_offset):
     vector = np.ones((correlation.shape[2], 2)) * np.nan
 
     if len(x) > 0:
-        ip = np.ravel_multi_index(np.array([x, y, z]), correlation.shape, order='F')
+        ip = np.ravel_multi_index(np.array([y, x, z]), correlation.shape, order='F')
         flattened_correlation = correlation.flatten(order='F')
 
         f0 = np.log(flattened_correlation[ip])
         f1 = np.log(flattened_correlation[ip - 1])
         f2 = np.log(flattened_correlation[ip + 1])
-        peak_y = y + (f1 - f2) / (2 * f1 - 4 * f0 + 2 * f2)
+        peak_y = y + 1 + (f1 - f2) / (2 * f1 - 4 * f0 + 2 * f2)
 
         f1 = np.log(flattened_correlation[ip - x_max])
         f2 = np.log(flattened_correlation[ip + x_max])
-        peak_x = y + (f1 - f2) / (2 * f1 - 4 * f0 + 2 * f2)
+        peak_x = x + 1 + (f1 - f2) / (2 * f1 - 4 * f0 + 2 * f2)
     
         sub_pixel_x = peak_x - (int_window / 2) - pixel_offset
         sub_pixel_y = peak_y - (int_window / 2) - pixel_offset
