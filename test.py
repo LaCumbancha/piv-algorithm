@@ -47,8 +47,7 @@ if __name__ == "__main__":
     input_images = utils.load_images(images_paths)
 
     point_1 = Point(815, 548, input_images)
-    point_2 = Point(692, 512, input_images)
-    points = {1: point_1, 2: point_2}
+    points = {1: point_1}
 
     # Running PIV
 
@@ -60,14 +59,9 @@ if __name__ == "__main__":
     # Results
 
     output_point_1 = output_data[1]
-    output_point_2 = output_data[2]
 
     print(f'POINT 1:')
     print(f'--------')
     print_output(output_point_1)
-
-    print(f'POINT 2:')
-    print(f'--------')
-    print_output(output_point_2)
 
     print(f'Computation time: {str(end - start)}')

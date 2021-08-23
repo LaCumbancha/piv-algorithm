@@ -6,6 +6,8 @@ import scipy.ndimage
 from .fix import fix_filter
 from piv.model import OutputPIV
 
+from octave import octave_cli
+
 
 # Vector field determination
 # Here it's where magic happens, calculating peaks and doing science stuff to get the proper PIV data.
@@ -25,7 +27,8 @@ def vector_field_determination(correlation, int_window, step, min_x, max_x, min_
     corr = ((correlation - min_res) / delta_res) * DEFAULT_RES_NORMALIZATION
     
     # Find peaks and S2N
-    x1, y1, indexes1, x2, y2, indexes2, s2n = find_all_displacements(corr)
+    # x1, y1, indexes1, x2, y2, indexes2, s2n = find_all_displacements(corr)
+    x1, y1, indexes1, x2, y2, indexes2, s2n = octave_cli.displacements(corr, nout=7)
     
     # Sub-pixel determination
     pixel_offset = 1 if (int_window % 2 == 0) else 0.5
@@ -100,7 +103,7 @@ def sub_pixel_gaussian(correlation, int_window, x, y, indexes, pixel_offset):
 # dimension (PeakX1, PeakY1, PeakX2, PeakY2), the absolute indexes of the correlation maximums (Idx1, Idx2) and the
 # ratio between the first and second peak (S2N) - 0 indicates non trusty results.
 
-SCIPY_FIX = True
+SCIPY_FILTER_FIX = True
 def find_all_displacements(correlation):
     corr_size = correlation.shape[0]
     
@@ -110,7 +113,7 @@ def find_all_displacements(correlation):
     # Finding second peak
     filter_size = 9 if corr_size >= 64 else 4 if corr_size >= 32 else 3
     filtered = scipy.ndimage.correlate(peak_positions1, np.ones([filter_size, filter_size, 1]), mode='constant')
-    filtered = fix_filter(filtered) if SCIPY_FIX else filtered
+    filtered = fix_filter(filtered) if SCIPY_FILTER_FIX else filtered
     correlation = (1 - filtered) * correlation
     peak2_val, peak2_x, peak2_y, peak_indexes2, _ = find_peaks(correlation)
 
@@ -142,7 +145,7 @@ def find_peaks(correlation):
     max_peak = correlation.max(0).max(0)
     max_positions = correlation == np.tile(max_peak[np.newaxis, np.newaxis, ...], [corr_size, corr_size, 1])
     max_indexes = np.where(max_positions.transpose(2, 1, 0).flatten())[0]
-    peak_y, peak_x, peak_z = np.unravel_index(max_indexes, (corr_size, corr_size, corr_numbers), order='F')
+    peak_y, peak_x, peak_z = np.unravel_index(max_indexes, shape=(corr_size, corr_size, corr_numbers), order='F')
 
     # If two elements equals to the max we should check if they are in the same layer and take the first one.
     # Surely the second one will be the second highest peak. Anyway this would be a bad vector.
