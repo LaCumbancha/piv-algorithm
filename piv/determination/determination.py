@@ -27,8 +27,7 @@ def vector_field_determination(correlation, int_window, step, min_x, max_x, min_
     corr = ((correlation - min_res) / delta_res) * DEFAULT_RES_NORMALIZATION
     
     # Find peaks and S2N
-    # x1, y1, indexes1, x2, y2, indexes2, s2n = find_all_displacements(corr)
-    x1, y1, indexes1, x2, y2, indexes2, s2n = octave_cli.displacements(corr, nout=7)
+    x1, y1, indexes1, x2, y2, indexes2, s2n = find_all_displacements(corr)
     
     # Sub-pixel determination
     pixel_offset = 1 if (int_window % 2 == 0) else 0.5
@@ -149,7 +148,7 @@ def find_peaks(correlation):
 
     # If two elements equals to the max we should check if they are in the same layer and take the first one.
     # Surely the second one will be the second highest peak. Anyway this would be a bad vector.
-    unique_max_indexes = np.unique(peak_z)
+    _, unique_max_indexes = np.unique(peak_z, return_index=True)
     max_indexes = max_indexes[unique_max_indexes]
     peak_x = peak_x[unique_max_indexes]
     peak_y = peak_y[unique_max_indexes]
