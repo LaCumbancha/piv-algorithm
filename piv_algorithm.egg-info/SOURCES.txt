@@ -1,6 +1,8 @@
 LICENSE
 README.md
 setup.py
+octave/__init__.py
+octave/octave.py
 piv/__init__.py
 piv/core/__init__.py
 piv/core/core.py

@@ -17,6 +17,9 @@ build: clean
 .PHONY: system-up
 
 release: build
+	git add .
+	git ci -m "Releasing version $(version)"
+	git push
 	git tag $(version)
 	git push --tags
 .PHONY: release
