@@ -15,5 +15,5 @@ setup(
     author_email='cerana@fi.uba.ar',
     description='PIV aglorithm',
     python_requires='>=3',
-    install_requires=['numpy', 'scipy', 'oct2py']
+    install_requires=['numpy', 'scipy', 'oct2py', 'sympy']
 )
