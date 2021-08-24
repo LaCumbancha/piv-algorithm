@@ -1,7 +1,13 @@
 SETUP_FILE='./setup.py'
 
-NEW_VERSION=$1
+UPDATE_VERSION=$1
 OLD_VERSION=$(cat "$SETUP_FILE" | grep "version=" | cut -d"'" -f 2)
 
-sed -i -e "s/version='$OLD_VERSION'/version='$NEW_VERSION'/g" $SETUP_FILE
+if [ "$UPDATE_VERSION" = "SNAPSHOT" ]; then
+  NEW_VERSION="$OLD_VERSION-$UPDATE_VERSION"
+else
+  NEW_VERSION="$UPDATE_VERSION"
+fi;
+
+#sed -i -e "s/version='$OLD_VERSION'/version='$NEW_VERSION'/g" $SETUP_FILE
 echo "Updating release from version $OLD_VERSION to $NEW_VERSION!"

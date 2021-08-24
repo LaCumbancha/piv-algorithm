@@ -2,7 +2,7 @@ SHELL := /bin/bash
 PWD := $(shell pwd)
 PYTHON := /usr/local/bin/python3 -W ignore
 
-release = "0.0.1"
+version = "SNAPSHOT"
 
 clean:
 	@rm -rf ./build/
@@ -11,10 +11,15 @@ clean:
 .PHONY: clean
 
 build: clean
-	@$(SHELL) ./extras/scripts/update-release $(release)
+	@$(SHELL) ./extras/scripts/update-release $(version)
 	@$(PYTHON) -m pip install build
 	@$(PYTHON) -m build --wheel
 .PHONY: system-up
+
+release: build
+	git tag $(version)
+	git push --tags
+.PHONY: release
 
 test:
 	@$(PYTHON) ./test.py
