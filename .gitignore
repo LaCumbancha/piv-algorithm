@@ -13,3 +13,6 @@ build/
 
 # Virtual env
 venv/
+
+# Test
+test.py
