@@ -15,5 +15,5 @@ setup(
     author_email='cerana@fi.uba.ar',
     description='PIV Algorithm',
     python_requires='>=3',
-    install_requires=['numpy', 'scipy', 'oct2py', 'sympy']
+    install_requires=['numpy', 'scipy', 'oct2py']
 )
