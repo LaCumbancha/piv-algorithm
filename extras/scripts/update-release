@@ -10,4 +10,5 @@ else
 fi;
 
 sed -i -e "s/version='$OLD_VERSION'/version='$NEW_VERSION'/g" $SETUP_FILE
+rm "$SETUP_FILE-e"
 echo "Updating release from version $OLD_VERSION to $NEW_VERSION!"
