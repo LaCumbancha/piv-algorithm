@@ -35,7 +35,7 @@ pip install scipy             # Scipy
 pip install oct2py            # Oct2Py
 ```
 
-### Buildeo
+### Building
 
 Para buildear una nueva versión de la librería, se provee el siguiente target de Makefile:
 
