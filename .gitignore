@@ -5,6 +5,10 @@
 __pycache__/
 build/
 
+# Octave
+.octave-tmp/
+octave-workspace
+
 # Notebooks
 .ipynb_checkpoints/
 
