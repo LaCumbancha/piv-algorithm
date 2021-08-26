@@ -34,3 +34,17 @@ pip install numpy             # Numpy
 pip install scipy             # Scipy
 pip install oct2py            # Oct2Py
 ```
+
+### Buildeo
+
+Para buildear una nueva versión de la librería, se provee el siguiente target de Makefile:
+
+```bash
+make build
+```
+
+Así mismo, si se desea releasear una nueva versión con su respectivo tag en el repositorio (y así poder especificarla en el requirements de otra aplicación) se debe utilizar:
+
+```bash
+make release version=$(new-version)
+```

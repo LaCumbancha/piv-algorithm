@@ -23,7 +23,3 @@ release: build
 	git tag $(version)
 	git push --tags
 .PHONY: release
-
-test:
-	@$(PYTHON) ./test.py
-.PHONY: system-up
