@@ -37,23 +37,24 @@ if __name__ == "__main__":
 
     # Mocking inputs
 
-    IMAGE_1 = './extras/images/Image 2a.png'
-    IMAGE_2 = './extras/images/Image 2b.png'
+    IMAGE_1 = './extras/images/Image 5a.png'
+    IMAGE_2 = './extras/images/Image 5b.png'
     images_paths = [IMAGE_1, IMAGE_2]
 
     scale = 1
     time_delta = 1
-    window_size = 32
+    window_size = 16
     input_images = utils.load_images(images_paths)
 
-    point_1 = Point(450, 120, input_images)
-    point_2 = Point(436, 177, input_images)
-    points = {1: point_1, 2: point_2}
+    point_1 = Point(452, 127, input_images)
+    point_2 = Point(440, 180, input_images)
+    point_3 = Point(500, 300, input_images)
+    points = {1: point_1, 2: point_2, 3: point_3}
 
     # Running PIV
 
     start = datetime.now()
-    frontend_input = InputPIV(points, time_delta, scale, window_size)
+    frontend_input = InputPIV(points, time_delta, scale, window_size, roi_size=512)
     output_data = piv.calculate_piv(frontend_input)
     end = datetime.now()
 
