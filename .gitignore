@@ -17,6 +17,3 @@ octave-workspace
 
 # Virtual env
 venv/
-
-# Test
-test.py

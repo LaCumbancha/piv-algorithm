@@ -23,3 +23,7 @@ release: build
 	git tag $(version)
 	git push --tags
 .PHONY: release
+
+example:
+	@$(PYTHON) example.py
+.PHONY: example
